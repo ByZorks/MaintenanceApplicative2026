@@ -26,6 +26,24 @@ class GildedRoseTest {
         assertEquals(expectedQuality, app.getItems()[0].quality, "La qualité calculée est incorrecte");
     }
 
+    @ParameterizedTest(name = "Un objet conjured avec sellIn={0} et quality={1} devrait avoir sellIn={2} et quality={3}")
+    @CsvSource({
+            "10, 20,  9, 18",  // Avant la date de péremption : -1 SellIn, -2 Quality
+            " 0, 20, -1, 16",  // Le jour de la date de péremption : baisse 2x plus vite (-4 Quality)
+            "-1, 20, -2, 16",  // Après la date de péremption : baisse 2x plus vite (-4 Quality)
+            "10,  0,  9,  0",  // La qualité ne peut jamais être négative (avant péremption)
+            "-1,  0, -2,  0"   // La qualité ne peut jamais être négative (après péremption)
+    })
+    void conjuredItem_UpdateQuality(int initialSellIn, int initialQuality, int expectedSellIn, int expectedQuality) {
+        Item[] items = new Item[]{new Item("Conjured", initialSellIn, initialQuality)};
+        GildedRose app = new GildedRose(items);
+
+        app.updateQuality();
+
+        assertEquals(expectedSellIn, app.getItems()[0].sellIn, "Le sellIn calculé est incorrect");
+        assertEquals(expectedQuality, app.getItems()[0].quality, "La qualité calculée est incorrecte");
+    }
+
     @ParameterizedTest(name = "Aged Brie avec sellIn={0} et quality={1} devrait avoir sellIn={2} et quality={3}")
     @CsvSource({
             "10, 20,  9, 21", // Avant péremption : la qualité augmente de 1

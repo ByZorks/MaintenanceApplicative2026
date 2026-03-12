@@ -13,6 +13,7 @@ class GildedRose {
                 case "Aged Brie" -> updateQualityAgedBrie(item);
                 case "Backstage passes to a TAFKAL80ETC concert" -> updateQualityBackstagePasses(item);
                 case "Sulfuras, Hand of Ragnaros" -> { /* Ne change rien */ }
+                case "Conjured" -> updateQualityConjured(item);
                 default -> updateQualityNormal(item);
             }
         }
@@ -47,6 +48,16 @@ class GildedRose {
             decreaseQuality(item, 2);
         } else {
             decreaseQuality(item, 1);
+        }
+
+        item.sellIn--;
+    }
+
+    private void updateQualityConjured(Item item) {
+        if (item.sellIn <= 0) {
+            decreaseQuality(item, 4);
+        } else {
+            decreaseQuality(item, 2);
         }
 
         item.sellIn--;
