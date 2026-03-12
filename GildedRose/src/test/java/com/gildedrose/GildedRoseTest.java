@@ -22,8 +22,8 @@ class GildedRoseTest {
 
         app.updateQuality();
 
-        assertEquals(expectedSellIn, app.items[0].sellIn, "Le sellIn calculé est incorrect");
-        assertEquals(expectedQuality, app.items[0].quality, "La qualité calculée est incorrecte");
+        assertEquals(expectedSellIn, app.getItems()[0].sellIn, "Le sellIn calculé est incorrect");
+        assertEquals(expectedQuality, app.getItems()[0].quality, "La qualité calculée est incorrecte");
     }
 
     @ParameterizedTest(name = "Aged Brie avec sellIn={0} et quality={1} devrait avoir sellIn={2} et quality={3}")
@@ -40,8 +40,8 @@ class GildedRoseTest {
 
         app.updateQuality();
 
-        assertEquals(expectedSellIn, app.items[0].sellIn, "Le sellIn du Aged Brie est incorrect");
-        assertEquals(expectedQuality, app.items[0].quality, "La qualité du Aged Brie est incorrecte");
+        assertEquals(expectedSellIn, app.getItems()[0].sellIn, "Le sellIn du Aged Brie est incorrect");
+        assertEquals(expectedQuality, app.getItems()[0].quality, "La qualité du Aged Brie est incorrecte");
     }
 
     @ParameterizedTest(name = "Sulfuras avec sellIn={0} et quality={1} devrait rester à sellIn={2} et quality={3}")
@@ -56,8 +56,8 @@ class GildedRoseTest {
 
         app.updateQuality();
 
-        assertEquals(expectedSellIn, app.items[0].sellIn, "Le sellIn de Sulfuras ne doit jamais changer");
-        assertEquals(expectedQuality, app.items[0].quality, "La qualité de Sulfuras doit toujours être de 80");
+        assertEquals(expectedSellIn, app.getItems()[0].sellIn, "Le sellIn de Sulfuras ne doit jamais changer");
+        assertEquals(expectedQuality, app.getItems()[0].quality, "La qualité de Sulfuras doit toujours être de 80");
     }
 
     @ParameterizedTest(name = "Backstage pass avec sellIn={0} et quality={1} devrait avoir sellIn={2} et quality={3}")
@@ -78,8 +78,8 @@ class GildedRoseTest {
 
         app.updateQuality();
 
-        assertEquals(expectedSellIn, app.items[0].sellIn, "Le sellIn calculé est incorrect");
-        assertEquals(expectedQuality, app.items[0].quality, "La qualité calculée est incorrecte");
+        assertEquals(expectedSellIn, app.getItems()[0].sellIn, "Le sellIn calculé est incorrect");
+        assertEquals(expectedQuality, app.getItems()[0].quality, "La qualité calculée est incorrecte");
     }
 
     @Test
@@ -89,6 +89,6 @@ class GildedRoseTest {
 
         app.updateQuality();
 
-        assertEquals(0, app.items.length);
+        assertEquals(0, app.getItems().length);
     }
 }
