@@ -5,30 +5,35 @@ import java.util.LinkedList;
 
 // REFACTOR ME
 public class Game implements IGame {
-   ArrayList players = new ArrayList();
-   int[] places = new int[6];
-   int[] purses = new int[6];
-   boolean[] inPenaltyBox = new boolean[6];
+   private final ArrayList<String> players = new ArrayList<>();
+   private final int[] places = new int[6];
+   private final int[] purses = new int[6];
+   private final boolean[] inPenaltyBox = new boolean[6];
 
-   LinkedList popQuestions = new LinkedList();
-   LinkedList scienceQuestions = new LinkedList();
-   LinkedList sportsQuestions = new LinkedList();
-   LinkedList rockQuestions = new LinkedList();
+   private final LinkedList<String> popQuestions = new LinkedList<>();
+   private final LinkedList<String> scienceQuestions = new LinkedList<>();
+   private final LinkedList<String> sportsQuestions = new LinkedList<>();
+   private final LinkedList<String> rockQuestions = new LinkedList<>();
 
-   int currentPlayer = 0;
-   boolean isGettingOutOfPenaltyBox;
+   private int currentPlayer = 0;
+   private boolean isGettingOutOfPenaltyBox;
+
+   private static final String POP = "Pop";
+   private static final String SCIENCE = "Science";
+   private static final String SPORTS = "Sports";
+   private static final String ROCK = "Rock";
 
    public Game() {
       for (int i = 0; i < 50; i++) {
-         popQuestions.addLast("Pop Question " + i);
-         scienceQuestions.addLast(("Science Question " + i));
-         sportsQuestions.addLast(("Sports Question " + i));
-         rockQuestions.addLast(createRockQuestion(i));
+         popQuestions.addLast(buildQuestion(POP, i));
+         scienceQuestions.addLast(buildQuestion(SCIENCE, i));
+         sportsQuestions.addLast(buildQuestion(SPORTS, i));
+         rockQuestions.addLast(buildQuestion(ROCK, i));
       }
    }
 
-   public String createRockQuestion(int index) {
-      return "Rock Question " + index;
+   private String buildQuestion(String question, int index) {
+      return question + " Question " + index;
    }
 
    public boolean isPlayable() {
@@ -87,28 +92,28 @@ public class Game implements IGame {
    }
 
    private void askQuestion() {
-      if (currentCategory() == "Pop")
+      if (currentCategory().equals(POP))
          System.out.println(popQuestions.removeFirst());
-      if (currentCategory() == "Science")
+      if (currentCategory().equals(SCIENCE))
          System.out.println(scienceQuestions.removeFirst());
-      if (currentCategory() == "Sports")
+      if (currentCategory().equals(SPORTS))
          System.out.println(sportsQuestions.removeFirst());
-      if (currentCategory() == "Rock")
+      if (currentCategory().equals(ROCK))
          System.out.println(rockQuestions.removeFirst());
    }
 
 
    private String currentCategory() {
-      if (places[currentPlayer] - 1 == 0) return "Pop";
-      if (places[currentPlayer] - 1 == 4) return "Pop";
-      if (places[currentPlayer] - 1 == 8) return "Pop";
-      if (places[currentPlayer] - 1 == 1) return "Science";
-      if (places[currentPlayer] - 1 == 5) return "Science";
-      if (places[currentPlayer] - 1 == 9) return "Science";
-      if (places[currentPlayer] - 1 == 2) return "Sports";
-      if (places[currentPlayer] - 1 == 6) return "Sports";
-      if (places[currentPlayer] - 1 == 10) return "Sports";
-      return "Rock";
+      if (places[currentPlayer] - 1 == 0) return POP;
+      if (places[currentPlayer] - 1 == 4) return POP;
+      if (places[currentPlayer] - 1 == 8) return POP;
+      if (places[currentPlayer] - 1 == 1) return SCIENCE;
+      if (places[currentPlayer] - 1 == 5) return SCIENCE;
+      if (places[currentPlayer] - 1 == 9) return SCIENCE;
+      if (places[currentPlayer] - 1 == 2) return SPORTS;
+      if (places[currentPlayer] - 1 == 6) return SPORTS;
+      if (places[currentPlayer] - 1 == 10) return SPORTS;
+      return ROCK;
    }
 
    public boolean handleCorrectAnswer() {
@@ -162,6 +167,6 @@ public class Game implements IGame {
 
 
    private boolean didPlayerWin() {
-      return !(purses[currentPlayer] == 6);
+      return purses[currentPlayer] != 6;
    }
 }
