@@ -122,7 +122,7 @@ public class Game implements IGame {
                 return true;
             }
         } else {
-            System.out.println("Answer was corrent!!!!");
+            System.out.println("Answer was correct!!!!");
             player.incrementPurse(1);
             System.out.println(player
                     + " now has "
