@@ -1,16 +1,13 @@
 package trivia;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 // REFACTOR ME
 public class Game implements IGame {
     private final ArrayList<Player> players = new ArrayList<>();
-
-    private final LinkedList<String> popQuestions = new LinkedList<>();
-    private final LinkedList<String> scienceQuestions = new LinkedList<>();
-    private final LinkedList<String> sportsQuestions = new LinkedList<>();
-    private final LinkedList<String> rockQuestions = new LinkedList<>();
+    private final HashMap<String, LinkedList<String>> questions = new HashMap<>();
 
     private int currentPlayerIndex = 0;
 
@@ -20,11 +17,16 @@ public class Game implements IGame {
     private static final String ROCK = "Rock";
 
     public Game() {
+        String[] categories = {POP, SCIENCE, SPORTS, ROCK};
+
+        for (String category : categories) {
+            questions.put(category, new LinkedList<>());
+        }
+
         for (int i = 0; i < 50; i++) {
-            popQuestions.addLast(buildQuestion(POP, i));
-            scienceQuestions.addLast(buildQuestion(SCIENCE, i));
-            sportsQuestions.addLast(buildQuestion(SPORTS, i));
-            rockQuestions.addLast(buildQuestion(ROCK, i));
+            for (String category : categories) {
+                questions.get(category).addLast(buildQuestion(category, i));
+            }
         }
     }
 
@@ -74,16 +76,16 @@ public class Game implements IGame {
     private void askQuestion() {
         switch (currentCategory()) {
             case POP:
-                System.out.println(popQuestions.removeFirst());
+                System.out.println(questions.get(POP).removeFirst());
                 break;
             case SCIENCE:
-                System.out.println(scienceQuestions.removeFirst());
+                System.out.println(questions.get(SCIENCE).removeFirst());
                 break;
             case SPORTS:
-                System.out.println(sportsQuestions.removeFirst());
+                System.out.println(questions.get(SPORTS).removeFirst());
                 break;
             case ROCK:
-                System.out.println(rockQuestions.removeFirst());
+                System.out.println(questions.get(ROCK).removeFirst());
                 break;
             default:
                 System.out.println("Invalid category");
