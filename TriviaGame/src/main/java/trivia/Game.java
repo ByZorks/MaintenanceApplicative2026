@@ -13,7 +13,6 @@ public class Game implements IGame {
     private final LinkedList<String> rockQuestions = new LinkedList<>();
 
     private int currentPlayerIndex = 0;
-    private boolean isGettingOutOfPenaltyBox;
 
     private static final String POP = "Pop";
     private static final String SCIENCE = "Science";
@@ -56,7 +55,7 @@ public class Game implements IGame {
 
         if (player.isInPenaltyBox()) {
             if (roll % 2 != 0) {
-                isGettingOutOfPenaltyBox = true;
+                player.setGettingOutOfPenaltyBox(true);
 
                 System.out.println(player + " is getting out of the penalty box");
                 player.incrementPlace(roll);
@@ -68,7 +67,7 @@ public class Game implements IGame {
                 askQuestion();
             } else {
                 System.out.println(player + " is not getting out of the penalty box");
-                isGettingOutOfPenaltyBox = false;
+                player.setGettingOutOfPenaltyBox(false);
             }
 
         } else {
@@ -125,7 +124,7 @@ public class Game implements IGame {
     public boolean handleCorrectAnswer() {
         Player player = players.get(currentPlayerIndex);
         if (player.isInPenaltyBox()) {
-            if (isGettingOutOfPenaltyBox) {
+            if (player.isGettingOutOfPenaltyBox()) {
                 System.out.println("Answer was correct!!!!");
                 player.incrementPurse(1);
                 System.out.println(player
@@ -145,10 +144,7 @@ public class Game implements IGame {
                     currentPlayerIndex = 0;
                 return true;
             }
-
-
         } else {
-
             System.out.println("Answer was corrent!!!!");
             player.incrementPurse(1);
             System.out.println(player
