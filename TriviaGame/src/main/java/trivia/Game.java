@@ -30,8 +30,8 @@ public class Game implements IGame {
         }
     }
 
-    private String buildQuestion(String question, int index) {
-        return question + " Question " + index;
+    private String buildQuestion(String category, int index) {
+        return category + " Question " + index;
     }
 
     public boolean isPlayable() {
@@ -127,9 +127,9 @@ public class Game implements IGame {
         player.incrementPurse(1);
         System.out.println(player + " now has " + player.getPurse() + " Gold Coins.");
 
-        boolean isWinning = didPlayerWin();
+        boolean shouldContinueGame = shouldContinueGame();
         nextPlayer();
-        return isWinning;
+        return shouldContinueGame;
     }
 
     public boolean wrongAnswer() {
@@ -143,7 +143,7 @@ public class Game implements IGame {
     }
 
 
-    private boolean didPlayerWin() {
+    private boolean shouldContinueGame() {
         return players.get(currentPlayerIndex).getPurse() != 6;
     }
 
