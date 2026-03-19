@@ -127,21 +127,9 @@ public class Game implements IGame {
             if (player.isGettingOutOfPenaltyBox()) {
                 System.out.println("Answer was correct!!!!");
                 player.incrementPurse(1);
-                System.out.println(player
-                        + " now has "
-                        + player.getPurse()
-                        + " Gold Coins.");
-
-                boolean winner = didPlayerWin();
-                currentPlayerIndex++;
-                if (currentPlayerIndex == players.size())
-                    currentPlayerIndex = 0;
-
-                return winner;
+                System.out.println(player + " now has " + player.getPurse() + " Gold Coins.");
             } else {
-                currentPlayerIndex++;
-                if (currentPlayerIndex == players.size())
-                    currentPlayerIndex = 0;
+                nextPlayer();
                 return true;
             }
         } else {
@@ -151,13 +139,11 @@ public class Game implements IGame {
                     + " now has "
                     + player.getPurse()
                     + " Gold Coins.");
-
-            boolean winner = didPlayerWin();
-            currentPlayerIndex++;
-            if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
-
-            return winner;
         }
+
+        boolean winner = didPlayerWin();
+        nextPlayer();
+        return winner;
     }
 
     public boolean wrongAnswer() {
@@ -166,14 +152,18 @@ public class Game implements IGame {
         System.out.println(player + " was sent to the penalty box");
         player.setInPenaltyBox(true);
 
-        currentPlayerIndex++;
-        if (currentPlayerIndex == players.size())
-            currentPlayerIndex = 0;
+        nextPlayer();
         return true;
     }
 
 
     private boolean didPlayerWin() {
         return players.get(currentPlayerIndex).getPurse() != 6;
+    }
+
+    private void nextPlayer() {
+        currentPlayerIndex++;
+        if (currentPlayerIndex == players.size())
+            currentPlayerIndex = 0;
     }
 }
