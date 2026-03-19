@@ -1,37 +1,28 @@
 package trivia;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 // REFACTOR ME
 public class Game implements IGame {
     private final ArrayList<Player> players = new ArrayList<>();
-    private final HashMap<String, LinkedList<String>> questions = new HashMap<>();
+    private final EnumMap<Category, Deque<String>> questions = new EnumMap<>(Category.class);
 
     private int currentPlayerIndex = 0;
 
-    private static final String POP = "Pop";
-    private static final String SCIENCE = "Science";
-    private static final String SPORTS = "Sports";
-    private static final String ROCK = "Rock";
-
     public Game() {
-        String[] categories = {POP, SCIENCE, SPORTS, ROCK};
-
-        for (String category : categories) {
+        for (Category category : Category.values()) {
             questions.put(category, new LinkedList<>());
         }
 
         for (int i = 0; i < 50; i++) {
-            for (String category : categories) {
+            for (Category category : Category.values()) {
                 questions.get(category).addLast(buildQuestion(category, i));
             }
         }
     }
 
-    private String buildQuestion(String category, int index) {
-        return category + " Question " + index;
+    private String buildQuestion(Category category, int index) {
+        return category.label() + " Question " + index;
     }
 
     public boolean isPlayable() {
@@ -69,47 +60,17 @@ public class Game implements IGame {
 
         player.incrementPlace(roll);
         System.out.println(player + "'s new location is " + player.getPlace());
-        System.out.println("The category is " + currentCategory());
+        System.out.println("The category is " + currentCategory().label());
         askQuestion();
     }
 
     private void askQuestion() {
-        switch (currentCategory()) {
-            case POP:
-                System.out.println(questions.get(POP).removeFirst());
-                break;
-            case SCIENCE:
-                System.out.println(questions.get(SCIENCE).removeFirst());
-                break;
-            case SPORTS:
-                System.out.println(questions.get(SPORTS).removeFirst());
-                break;
-            case ROCK:
-                System.out.println(questions.get(ROCK).removeFirst());
-                break;
-            default:
-                System.out.println("Invalid category");
-        }
+        System.out.println(questions.get(currentCategory()).removeFirst());
     }
 
 
-    private String currentCategory() {
-        switch (players.get(currentPlayerIndex).getPlace() - 1) {
-            case 0:
-            case 4:
-            case 8:
-                return POP;
-            case 1:
-            case 5:
-            case 9:
-                return SCIENCE;
-            case 2:
-            case 6:
-            case 10:
-                return SPORTS;
-            default:
-                return ROCK;
-        }
+    private Category currentCategory() {
+        return Category.fromPlace(players.get(currentPlayerIndex).getPlace());
     }
 
     public boolean handleCorrectAnswer() {
