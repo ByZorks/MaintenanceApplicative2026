@@ -112,7 +112,7 @@ public class Game implements IGame {
       Player player = players.get(currentPlayerIndex);
       if (player.isInPenaltyBox()) {
          if (isGettingOutOfPenaltyBox) {
-            System.out.println("Answer was corrent!!!!");
+            System.out.println("Answer was correct!!!!");
             player.incrementPurse(1);
             System.out.println(player
                                + " now has "
