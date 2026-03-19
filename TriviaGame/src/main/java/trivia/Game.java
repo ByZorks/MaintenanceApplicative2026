@@ -114,9 +114,13 @@ public class Game implements IGame {
 
     public boolean handleCorrectAnswer() {
         Player player = players.get(currentPlayerIndex);
-        if (player.isInPenaltyBox() && !player.isGettingOutOfPenaltyBox()) {
-            nextPlayer();
-            return true;
+        if (player.isInPenaltyBox()) {
+            if (!player.isGettingOutOfPenaltyBox()) {
+                nextPlayer();
+                return true;
+            } else {
+                player.setInPenaltyBox(false);
+            }
         }
 
         System.out.println("Answer was correct!!!!");
