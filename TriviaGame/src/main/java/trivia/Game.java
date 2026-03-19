@@ -56,30 +56,19 @@ public class Game implements IGame {
         if (player.isInPenaltyBox()) {
             if (roll % 2 != 0) {
                 player.setGettingOutOfPenaltyBox(true);
-
                 System.out.println(player + " is getting out of the penalty box");
-                player.incrementPlace(roll);
-
-                System.out.println(player
-                        + "'s new location is "
-                        + player.getPlace());
-                System.out.println("The category is " + currentCategory());
-                askQuestion();
             } else {
                 System.out.println(player + " is not getting out of the penalty box");
                 player.setGettingOutOfPenaltyBox(false);
+                return;
             }
 
-        } else {
-            player.incrementPlace(roll);
-
-            System.out.println(player
-                    + "'s new location is "
-                    + player.getPlace());
-            System.out.println("The category is " + currentCategory());
-            askQuestion();
         }
 
+        player.incrementPlace(roll);
+        System.out.println(player + "'s new location is " + player.getPlace());
+        System.out.println("The category is " + currentCategory());
+        askQuestion();
     }
 
     private void askQuestion() {
