@@ -5,7 +5,7 @@ import java.util.*;
 // REFACTOR ME
 public class Game implements IGame {
     private final ArrayList<Player> players = new ArrayList<>();
-    private final EnumMap<Category, Deque<String>> questions = new EnumMap<>(Category.class);
+    private final EnumMap<Category, LinkedList<String>> questions = new EnumMap<>(Category.class);
 
     private int currentPlayerIndex = 0;
 
@@ -109,8 +109,6 @@ public class Game implements IGame {
     }
 
     private void nextPlayer() {
-        currentPlayerIndex++;
-        if (currentPlayerIndex == players.size())
-            currentPlayerIndex = 0;
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 }

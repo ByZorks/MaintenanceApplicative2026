@@ -13,9 +13,7 @@ public class Player {
     }
 
     public void incrementPlace(int amount) {
-        this.place += amount;
-        if (this.place > 12)
-            this.place -= 12;
+        this.place = ((this.place - 1 + amount) % 12) + 1;
     }
 
     public void incrementPurse(int amount) {
