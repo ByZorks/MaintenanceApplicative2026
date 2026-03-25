@@ -1,3 +1,5 @@
+package myCalendar;
+
 import java.time.LocalDateTime;
 
 public class Event {
