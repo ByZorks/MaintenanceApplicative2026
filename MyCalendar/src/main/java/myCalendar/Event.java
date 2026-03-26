@@ -1,19 +1,17 @@
 package myCalendar;
 
-import java.time.LocalDateTime;
-
 public class Event {
     private EventType type;
     private final EventTitle title;
     private final EventOwner proprietaire;
-    private final LocalDateTime dateDebut;
-    private final int dureeMinutes;
+    private final EventDateTime dateDebut;
+    private final EventDuration dureeMinutes;
     private final String lieu; // utilisé seulement pour REUNION
     private final String participants; // séparés par virgules (pour REUNION uniquement)
-    private final int frequenceJours; // uniquement pour PERIODIQUE
+    private final EventFrequency frequenceJours; // uniquement pour PERIODIQUE
 
-    public Event(EventType type, EventTitle title, EventOwner proprietaire, LocalDateTime dateDebut, int dureeMinutes,
-                 String lieu, String participants, int frequenceJours) {
+    public Event(EventType type, EventTitle title, EventOwner proprietaire, EventDateTime dateDebut, EventDuration dureeMinutes,
+                 String lieu, String participants, EventFrequency frequenceJours) {
         this.type = type;
         this.title = title;
         this.proprietaire = proprietaire;
@@ -36,15 +34,15 @@ public class Event {
         return type;
     }
 
-    public LocalDateTime getDateDebut() {
+    public EventDateTime getDateDebut() {
         return dateDebut;
     }
 
-    public int getDureeMinutes() {
+    public EventDuration getDureeMinutes() {
         return dureeMinutes;
     }
 
-    public int getFrequenceJours() {
+    public EventFrequency getFrequenceJours() {
         return frequenceJours;
     }
 

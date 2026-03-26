@@ -121,8 +121,8 @@ public class Main {
                                 System.out.print("Entrez le mois (1-12) : ");
                                 int mois = Integer.parseInt(scanner.nextLine());
 
-                                LocalDateTime debutMois = LocalDateTime.of(anneeMois, mois, 1, 0, 0);
-                                LocalDateTime finMois = debutMois.plusMonths(1).minusSeconds(1);
+                                EventDateTime debutMois = new EventDateTime(LocalDateTime.of(anneeMois, mois, 1, 0, 0));
+                                EventDateTime finMois = debutMois.plusMonths(1).minusSeconds(1);
 
                                 afficherListe(calendar.eventsDansPeriode(debutMois, finMois));
                                 break;
@@ -133,12 +133,14 @@ public class Main {
                                 System.out.print("Entrez le numéro de semaine (1-52) : ");
                                 int semaine = Integer.parseInt(scanner.nextLine());
 
-                                LocalDateTime debutSemaine = LocalDateTime.now()
-                                        .withYear(anneeSemaine)
-                                        .with(WeekFields.of(Locale.FRANCE).weekOfYear(), semaine)
-                                        .with(WeekFields.of(Locale.FRANCE).dayOfWeek(), 1)
-                                        .withHour(0).withMinute(0);
-                                LocalDateTime finSemaine = debutSemaine.plusDays(7).minusSeconds(1);
+                                EventDateTime debutSemaine = new EventDateTime(
+                                        LocalDateTime.now()
+                                                .withYear(anneeSemaine)
+                                                .with(WeekFields.of(Locale.FRANCE).weekOfYear(), semaine)
+                                                .with(WeekFields.of(Locale.FRANCE).dayOfWeek(), 1)
+                                                .withHour(0).withMinute(0)
+                                );
+                                EventDateTime finSemaine = debutSemaine.plusDays(7).minusSeconds(1);
 
                                 afficherListe(calendar.eventsDansPeriode(debutSemaine, finSemaine));
                                 break;
@@ -151,8 +153,8 @@ public class Main {
                                 System.out.print("Entrez le jour (1-31) : ");
                                 int jour = Integer.parseInt(scanner.nextLine());
 
-                                LocalDateTime debutJour = LocalDateTime.of(anneeJour, moisJour, jour, 0, 0);
-                                LocalDateTime finJour = debutJour.plusDays(1).minusSeconds(1);
+                                EventDateTime debutJour = new EventDateTime(LocalDateTime.of(anneeJour, moisJour, jour, 0, 0));
+                                EventDateTime finJour = debutJour.plusDays(1).minusSeconds(1);
 
                                 afficherListe(calendar.eventsDansPeriode(debutJour, finJour));
                                 break;
@@ -174,11 +176,11 @@ public class Main {
                         System.out.print("Minute début (0-59) : ");
                         int minute = Integer.parseInt(scanner.nextLine());
                         System.out.print("Durée (en minutes) : ");
-                        int duree = Integer.parseInt(scanner.nextLine());
+                        EventDuration duree = new EventDuration(Integer.parseInt(scanner.nextLine()));
 
                         calendar.ajouterEvent(EventType.RDV_PERSONNEL, titre, utilisateur,
-                                LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute), duree,
-                                "", "", 0);
+                                new EventDateTime(LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute)), duree,
+                                "", "", new EventFrequency(0));
 
                         System.out.println("Événement ajouté.");
                         break;
@@ -198,7 +200,7 @@ public class Main {
                         System.out.print("Minute début (0-59) : ");
                         int minute2 = Integer.parseInt(scanner.nextLine());
                         System.out.print("Durée (en minutes) : ");
-                        int duree2 = Integer.parseInt(scanner.nextLine());
+                        EventDuration duree2 = new EventDuration(Integer.parseInt(scanner.nextLine()));
                         System.out.println("Lieu :");
                         String lieu = scanner.nextLine();
                         
@@ -212,8 +214,8 @@ public class Main {
                         }
 
                         calendar.ajouterEvent(EventType.REUNION, titre2, utilisateur,
-                                LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2), duree2,
-                                lieu, participants.toString(), 0);
+                                new EventDateTime(LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2)), duree2,
+                                lieu, participants.toString(), new EventFrequency(0));
 
                         System.out.println("Événement ajouté.");
                         break;
@@ -233,10 +235,10 @@ public class Main {
                         System.out.print("Minute début (0-59) : ");
                         int minute3 = Integer.parseInt(scanner.nextLine());
                         System.out.print("Frequence (en jours) : ");
-                        int frequence = Integer.parseInt(scanner.nextLine());
+                        EventFrequency frequence = new EventFrequency(Integer.parseInt(scanner.nextLine()));
 
                         calendar.ajouterEvent(EventType.PERIODIQUE, titre3, utilisateur,
-                                LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3), 0,
+                                new EventDateTime(LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3)), new EventDuration(0),
                                 "", "", frequence);
 
                         System.out.println("Événement ajouté.");

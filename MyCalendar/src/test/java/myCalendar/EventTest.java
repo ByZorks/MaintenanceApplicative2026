@@ -15,7 +15,7 @@ class EventTest {
     @BeforeEach
     void setUp() {
         event = new Event(EventType.RDV_PERSONNEL, new EventTitle("TITLE"), new EventOwner("PROPRIETAIRE"),
-                LocalDateTime.parse("2018-05-05T11:50:55"), 30, "LIEU", "PARTICIPANTS", 0);
+                new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")), new EventDuration(30), "LIEU", "PARTICIPANTS", new EventFrequency(0));
     }
 
     @ParameterizedTest

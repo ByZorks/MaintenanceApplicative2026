@@ -1,6 +1,5 @@
 package myCalendar;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,23 +10,23 @@ public class CalendarManager {
         this.events = new ArrayList<>();
     }
 
-    public void ajouterEvent(EventType type, EventTitle title, EventOwner proprietaire, LocalDateTime dateDebut, int dureeMinutes,
-                             String lieu, String participants, int frequenceJours) {
+    public void ajouterEvent(EventType type, EventTitle title, EventOwner proprietaire, EventDateTime dateDebut,
+                             EventDuration dureeMinutes, String lieu, String participants, EventFrequency frequenceJours) {
         Event e = new Event(type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants, frequenceJours);
         events.add(e);
     }
 
-    public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
+    public List<Event> eventsDansPeriode(EventDateTime debut, EventDateTime fin) {
         List<Event> result = new ArrayList<>();
         for (Event e : events) {
             if (e.getType().equals(EventType.PERIODIQUE)) {
-                LocalDateTime temp = e.getDateDebut();
+                EventDateTime temp = e.getDateDebut();
                 while (temp.isBefore(fin)) {
                     if (!temp.isBefore(debut)) {
                         result.add(e);
                         break;
                     }
-                    temp = temp.plusDays(e.getFrequenceJours());
+                    temp = temp.plusDays(e.getFrequenceJours().valeur());
                 }
             } else if (!e.getDateDebut().isBefore(debut) && !e.getDateDebut().isAfter(fin)) {
                 result.add(e);
@@ -37,8 +36,8 @@ public class CalendarManager {
     }
 
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime fin1 = e1.getDateDebut().plusMinutes(e1.getDureeMinutes());
-        LocalDateTime fin2 = e2.getDateDebut().plusMinutes(e2.getDureeMinutes());
+        EventDateTime fin1 = e1.getDateDebut().plusMinutes(e1.getDureeMinutes().valeur());
+        EventDateTime fin2 = e2.getDateDebut().plusMinutes(e2.getDureeMinutes().valeur());
 
         if (e1.getType().equals(EventType.PERIODIQUE) || e2.getType().equals(EventType.PERIODIQUE)) {
             return false; // Simplification abusive
