@@ -2,6 +2,7 @@ package myCalendar;
 
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -180,7 +181,7 @@ public class Main {
 
                         calendar.ajouterEvent(EventType.RDV_PERSONNEL, titre, utilisateur,
                                 new EventDateTime(LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute)), duree,
-                                new EventLocation(""), "", new EventFrequency(0));
+                                new EventLocation(""), new EventParticipants(List.of("")), new EventFrequency(0));
 
                         System.out.println("Événement ajouté.");
                         break;
@@ -204,18 +205,19 @@ public class Main {
                         System.out.println("Lieu :");
                         EventLocation lieu = new EventLocation(scanner.nextLine());
                         
-                        StringBuilder participants = new StringBuilder(utilisateur.toString());
-
                         System.out.println("Ajouter un participant ? (oui / non)");
+                        List<String> participants = new ArrayList<>();
+                        participants.add(utilisateur.toString());
                         while (scanner.nextLine().equals("oui"))
                         {
                             System.out.print("Participants : " + participants);
-                            participants.append(", ").append(scanner.nextLine());
+                            participants.add(scanner.nextLine());
+                            System.out.println("Ajouter un participant ? (oui / non)");
                         }
 
                         calendar.ajouterEvent(EventType.REUNION, titre2, utilisateur,
                                 new EventDateTime(LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2)), duree2,
-                                lieu, participants.toString(), new EventFrequency(0));
+                                lieu, new EventParticipants(participants), new EventFrequency(0));
 
                         System.out.println("Événement ajouté.");
                         break;
@@ -239,7 +241,7 @@ public class Main {
 
                         calendar.ajouterEvent(EventType.PERIODIQUE, titre3, utilisateur,
                                 new EventDateTime(LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3)), new EventDuration(0),
-                                new EventLocation(""), "", frequence);
+                                new EventLocation(""), new EventParticipants(List.of("")), frequence);
 
                         System.out.println("Événement ajouté.");
                         break;

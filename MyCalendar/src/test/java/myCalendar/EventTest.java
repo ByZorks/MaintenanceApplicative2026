@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,7 +16,7 @@ class EventTest {
     @BeforeEach
     void setUp() {
         event = new Event(EventType.RDV_PERSONNEL, new EventTitle("TITLE"), new EventOwner("PROPRIETAIRE"),
-                new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")), new EventDuration(30), new EventLocation("LIEU"), "PARTICIPANTS", new EventFrequency(0));
+                new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")), new EventDuration(30), new EventLocation("LIEU"), new EventParticipants(List.of("PARTICIPANTS")), new EventFrequency(0));
     }
 
     @ParameterizedTest
