@@ -3,16 +3,16 @@ package myCalendar;
 import java.time.LocalDateTime;
 
 public class Event {
-    public String type; // "RDV_PERSONNEL", "REUNION", "PERIODIQUE"
-    public String title;
-    public String proprietaire;
-    public LocalDateTime dateDebut;
-    public int dureeMinutes;
-    public String lieu; // utilisé seulement pour REUNION
-    public String participants; // séparés par virgules (pour REUNION uniquement)
-    public int frequenceJours; // uniquement pour PERIODIQUE
+    private EventType type;
+    private final String title;
+    private final String proprietaire;
+    private final LocalDateTime dateDebut;
+    private final int dureeMinutes;
+    private final String lieu; // utilisé seulement pour REUNION
+    private final String participants; // séparés par virgules (pour REUNION uniquement)
+    private final int frequenceJours; // uniquement pour PERIODIQUE
 
-    public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
+    public Event(EventType type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
                  String lieu, String participants, int frequenceJours) {
         this.type = type;
         this.title = title;
@@ -25,14 +25,30 @@ public class Event {
     }
 
     public String description() {
-        String desc = "";
-        if (type.equals("RDV_PERSONNEL")) {
-            desc = "RDV : " + title + " à " + dateDebut.toString();
-        } else if (type.equals("REUNION")) {
-            desc = "Réunion : " + title + " à " + lieu + " avec " + participants;
-        } else if (type.equals("PERIODIQUE")) {
-            desc = "Événement périodique : " + title + " tous les " + frequenceJours + " jours";
-        }
-        return desc;
+        return switch (type) {
+            case RDV_PERSONNEL -> "RDV : " + title + " à " + dateDebut.toString();
+            case REUNION -> "Réunion : " + title + " à " + lieu + " avec " + participants;
+            case PERIODIQUE -> "Événement périodique : " + title + " tous les " + frequenceJours + " jours";
+        };
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public LocalDateTime getDateDebut() {
+        return dateDebut;
+    }
+
+    public int getDureeMinutes() {
+        return dureeMinutes;
+    }
+
+    public int getFrequenceJours() {
+        return frequenceJours;
+    }
+
+    public void setType(final EventType type) {
+        this.type = type;
     }
 }
