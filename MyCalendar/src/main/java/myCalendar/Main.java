@@ -10,10 +10,10 @@ public class Main {
     static void main() {
         CalendarManager calendar = new CalendarManager();
         Scanner scanner = new Scanner(System.in);
-        String utilisateur = null;
+        EventOwner utilisateur = null;
         boolean continuer = true;
 
-        String[] utilisateurs = new String[99];
+        EventOwner[] utilisateurs = new EventOwner[99];
         String[] motsDePasses = new String[99];
         int nbUtilisateurs = 0;
 
@@ -38,15 +38,15 @@ public class Main {
                 switch (scanner.nextLine()) {
                     case "1":
                         System.out.print("Nom d'utilisateur: ");
-                        utilisateur = scanner.nextLine();
+                        utilisateur = new EventOwner(scanner.nextLine());
 
-                        if (utilisateur.equals("Roger")) {
+                        if (utilisateur.toString().equals("Roger")) {
                             String motDePasse = scanner.nextLine();
                             if (!motDePasse.equals("Chat")) {
                                 utilisateur = null;
                             }
                         } else {
-                            if (utilisateur.equals("Pierre")) {
+                            if (utilisateur.toString().equals("Pierre")) {
                                 String motDePasse = scanner.nextLine();
                                 if (!motDePasse.equals("KiRouhl")) {
                                     utilisateur = null;
@@ -56,7 +56,7 @@ public class Main {
                                 String motDePasse = scanner.nextLine();
 
                                 for (int i = 0; i < nbUtilisateurs; i = i + 1) {
-                                    if (utilisateurs[i].equals(utilisateur) && motsDePasses[i].equals(motDePasse)) {
+                                    if (utilisateurs[i].toString().equals(utilisateur) && motsDePasses[i].equals(motDePasse)) {
                                         utilisateur = utilisateurs[i];
                                     }
                                 }
@@ -66,7 +66,7 @@ public class Main {
 
                     case "2":
                         System.out.print("Nom d'utilisateur: ");
-                        utilisateur = scanner.nextLine();
+                        utilisateur = new EventOwner(scanner.nextLine());
                         System.out.print("Mot de passe: ");
                         String motDePasse = scanner.nextLine();
                         System.out.print("Répéter mot de passe: ");
@@ -202,7 +202,7 @@ public class Main {
                         System.out.println("Lieu :");
                         String lieu = scanner.nextLine();
                         
-                        StringBuilder participants = new StringBuilder(utilisateur);
+                        StringBuilder participants = new StringBuilder(utilisateur.toString());
 
                         System.out.println("Ajouter un participant ? (oui / non)");
                         while (scanner.nextLine().equals("oui"))

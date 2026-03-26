@@ -5,14 +5,14 @@ import java.time.LocalDateTime;
 public class Event {
     private EventType type;
     private final EventTitle title;
-    private final String proprietaire;
+    private final EventOwner proprietaire;
     private final LocalDateTime dateDebut;
     private final int dureeMinutes;
     private final String lieu; // utilisé seulement pour REUNION
     private final String participants; // séparés par virgules (pour REUNION uniquement)
     private final int frequenceJours; // uniquement pour PERIODIQUE
 
-    public Event(EventType type, EventTitle title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
+    public Event(EventType type, EventTitle title, EventOwner proprietaire, LocalDateTime dateDebut, int dureeMinutes,
                  String lieu, String participants, int frequenceJours) {
         this.type = type;
         this.title = title;
