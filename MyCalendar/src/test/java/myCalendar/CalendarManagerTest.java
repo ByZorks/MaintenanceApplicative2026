@@ -17,13 +17,13 @@ class CalendarManagerTest {
     static void setUp() {
         calendarManager = new CalendarManager();
         calendarManager.ajouterEvent(EventType.RDV_PERSONNEL, new EventTitle("TITLE1"), new EventOwner("PROPRIETAIRE1"),
-                new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")), new EventDuration(30), "LIEU1", "PARTICIPANTS1", new EventFrequency(0));
+                new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")), new EventDuration(30), new EventLocation("LIEU1"), "PARTICIPANTS1", new EventFrequency(0));
 
         calendarManager.ajouterEvent(EventType.PERIODIQUE, new EventTitle("TITLE2"), new EventOwner("PROPRIETAIRE2"),
-                new EventDateTime(LocalDateTime.parse("2018-05-06T09:00:00")), new EventDuration(45), "LIEU2", "PARTICIPANTS2", new EventFrequency(5));
+                new EventDateTime(LocalDateTime.parse("2018-05-06T09:00:00")), new EventDuration(45), new EventLocation("LIEU2"), "PARTICIPANTS2", new EventFrequency(5));
 
         calendarManager.ajouterEvent(EventType.REUNION, new EventTitle("TITLE3"), new EventOwner("PROPRIETAIRE3"),
-                new EventDateTime(LocalDateTime.parse("2018-05-10T14:30:00")), new EventDuration(60), "LIEU3", "PARTICIPANTS3", new EventFrequency(1));
+                new EventDateTime(LocalDateTime.parse("2018-05-10T14:30:00")), new EventDuration(60), new EventLocation("LIEU3"), "PARTICIPANTS3", new EventFrequency(1));
     }
 
     @ParameterizedTest(name = "Test période: début {0} - fin {1} -> nombre d'événements attendus : {2}")
@@ -68,9 +68,9 @@ class CalendarManagerTest {
         EventDateTime dateDebutE2 = new EventDateTime(LocalDateTime.parse("2018-05-05T12:00:00"));
 
         Event e1 = new Event(EventType.REUNION, new EventTitle("TITLE1"), new EventOwner("PROPRIETAIRE1"),
-                dateDebutE1, new EventDuration(dureeE1), "LIEU1", "PART1", new EventFrequency(0));
+                dateDebutE1, new EventDuration(dureeE1), new EventLocation("LIEU1"), "PART1", new EventFrequency(0));
         Event e2 = new Event(EventType.REUNION, new EventTitle("TITLE2"), new EventOwner("PROPRIETAIRE2"),
-                dateDebutE2, new EventDuration(30), "LIEU2", "PART2", new EventFrequency(0));
+                dateDebutE2, new EventDuration(30), new EventLocation("LIEU2"), "PART2", new EventFrequency(0));
 
         boolean output = calendarManager.conflit(e1, e2);
 
@@ -87,9 +87,9 @@ class CalendarManagerTest {
         EventDateTime dateDebut = new EventDateTime(LocalDateTime.parse("2018-05-05T12:00:00"));
 
         Event e1 = new Event(EventType.valueOf(type1), new EventTitle("TITLE1"), new EventOwner("PROPRIETAIRE1"),
-                dateDebut, new EventDuration(30), "LIEU1", "PART1", new EventFrequency(0));
+                dateDebut, new EventDuration(30), new EventLocation("LIEU1"), "PART1", new EventFrequency(0));
         Event e2 = new Event(EventType.valueOf(type2), new EventTitle("TITLE2"), new EventOwner("PROPRIETAIRE1"),
-                dateDebut, new EventDuration(30), "LIEU2", "PART2", new EventFrequency(0));
+                dateDebut, new EventDuration(30), new EventLocation("LIEU2"), "PART2", new EventFrequency(0));
 
         boolean output = calendarManager.conflit(e1, e2);
 

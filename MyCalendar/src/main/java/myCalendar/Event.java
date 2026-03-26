@@ -6,12 +6,12 @@ public class Event {
     private final EventOwner proprietaire;
     private final EventDateTime dateDebut;
     private final EventDuration dureeMinutes;
-    private final String lieu; // utilisé seulement pour REUNION
+    private final EventLocation lieu; // utilisé seulement pour REUNION
     private final String participants; // séparés par virgules (pour REUNION uniquement)
     private final EventFrequency frequenceJours; // uniquement pour PERIODIQUE
 
     public Event(EventType type, EventTitle title, EventOwner proprietaire, EventDateTime dateDebut, EventDuration dureeMinutes,
-                 String lieu, String participants, EventFrequency frequenceJours) {
+                 EventLocation lieu, String participants, EventFrequency frequenceJours) {
         this.type = type;
         this.title = title;
         this.proprietaire = proprietaire;

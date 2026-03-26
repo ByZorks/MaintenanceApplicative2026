@@ -180,7 +180,7 @@ public class Main {
 
                         calendar.ajouterEvent(EventType.RDV_PERSONNEL, titre, utilisateur,
                                 new EventDateTime(LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute)), duree,
-                                "", "", new EventFrequency(0));
+                                new EventLocation(""), "", new EventFrequency(0));
 
                         System.out.println("Événement ajouté.");
                         break;
@@ -202,7 +202,7 @@ public class Main {
                         System.out.print("Durée (en minutes) : ");
                         EventDuration duree2 = new EventDuration(Integer.parseInt(scanner.nextLine()));
                         System.out.println("Lieu :");
-                        String lieu = scanner.nextLine();
+                        EventLocation lieu = new EventLocation(scanner.nextLine());
                         
                         StringBuilder participants = new StringBuilder(utilisateur.toString());
 
@@ -239,7 +239,7 @@ public class Main {
 
                         calendar.ajouterEvent(EventType.PERIODIQUE, titre3, utilisateur,
                                 new EventDateTime(LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3)), new EventDuration(0),
-                                "", "", frequence);
+                                new EventLocation(""), "", frequence);
 
                         System.out.println("Événement ajouté.");
                         break;
