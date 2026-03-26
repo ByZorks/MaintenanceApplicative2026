@@ -162,7 +162,7 @@ public class Main {
                     case "2":
                         // Ajout simplifié d'un RDV personnel
                         System.out.print("Titre de l'événement : ");
-                        String titre = scanner.nextLine();
+                        EventTitle titre = new EventTitle(scanner.nextLine());
                         System.out.print("Année (AAAA) : ");
                         int annee = Integer.parseInt(scanner.nextLine());
                         System.out.print("Mois (1-12) : ");
@@ -186,7 +186,7 @@ public class Main {
                     case "3":
                         // Ajout simplifié d'une réunion
                         System.out.print("Titre de l'événement : ");
-                        String titre2 = scanner.nextLine();
+                        EventTitle titre2 = new EventTitle(scanner.nextLine());
                         System.out.print("Année (AAAA) : ");
                         int annee2 = Integer.parseInt(scanner.nextLine());
                         System.out.print("Mois (1-12) : ");
@@ -221,7 +221,7 @@ public class Main {
                         case "4":
                         // Ajout simplifié d'une réunion
                         System.out.print("Titre de l'événement : ");
-                        String titre3 = scanner.nextLine();
+                        EventTitle titre3 = new EventTitle(scanner.nextLine());
                         System.out.print("Année (AAAA) : ");
                         int annee3 = Integer.parseInt(scanner.nextLine());
                         System.out.print("Mois (1-12) : ");

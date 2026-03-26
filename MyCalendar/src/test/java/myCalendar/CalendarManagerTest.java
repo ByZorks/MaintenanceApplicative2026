@@ -16,9 +16,9 @@ class CalendarManagerTest {
     @BeforeAll
     static void setUp() {
         calendarManager = new CalendarManager();
-        calendarManager.ajouterEvent(EventType.RDV_PERSONNEL, "TITLE1", "PROPRIETAIRE1", LocalDateTime.parse("2018-05-05T11:50:55"), 30, "LIEU1", "PARTICIPANTS1", 0);
-        calendarManager.ajouterEvent(EventType.PERIODIQUE, "TITLE2", "PROPRIETAIRE2", LocalDateTime.parse("2018-05-06T09:00:00"), 45, "LIEU2", "PARTICIPANTS2", 5);
-        calendarManager.ajouterEvent(EventType.REUNION, "TITLE3", "PROPRIETAIRE3", LocalDateTime.parse("2018-05-10T14:30:00"), 60, "LIEU3", "PARTICIPANTS3", 1);
+        calendarManager.ajouterEvent(EventType.RDV_PERSONNEL, new EventTitle("TITLE1"), "PROPRIETAIRE1", LocalDateTime.parse("2018-05-05T11:50:55"), 30, "LIEU1", "PARTICIPANTS1", 0);
+        calendarManager.ajouterEvent(EventType.PERIODIQUE, new EventTitle("TITLE2"), "PROPRIETAIRE2", LocalDateTime.parse("2018-05-06T09:00:00"), 45, "LIEU2", "PARTICIPANTS2", 5);
+        calendarManager.ajouterEvent(EventType.REUNION, new EventTitle("TITLE3"), "PROPRIETAIRE3", LocalDateTime.parse("2018-05-10T14:30:00"), 60, "LIEU3", "PARTICIPANTS3", 1);
     }
 
     @ParameterizedTest(name = "Test période: début {0} - fin {1} -> nombre d'événements attendus : {2}")
@@ -62,8 +62,8 @@ class CalendarManagerTest {
         LocalDateTime dateDebutE1 = LocalDateTime.parse(debutE1);
         LocalDateTime dateDebutE2 = LocalDateTime.parse("2018-05-05T12:00:00");
 
-        Event e1 = new Event(EventType.REUNION, "TITLE1", "PROP1", dateDebutE1, dureeE1, "LIEU1", "PART1", 0);
-        Event e2 = new Event(EventType.REUNION, "TITLE2", "PROP2", dateDebutE2, 30, "LIEU2", "PART2", 0);
+        Event e1 = new Event(EventType.REUNION, new EventTitle("TITLE1"), "PROP1", dateDebutE1, dureeE1, "LIEU1", "PART1", 0);
+        Event e2 = new Event(EventType.REUNION, new EventTitle("TITLE2"), "PROP2", dateDebutE2, 30, "LIEU2", "PART2", 0);
 
         boolean output = calendarManager.conflit(e1, e2);
 
@@ -79,8 +79,8 @@ class CalendarManagerTest {
     void test_conflit_type(String type1, String type2, boolean expected) {
         LocalDateTime dateDebut = LocalDateTime.parse("2018-05-05T12:00:00");
 
-        Event e1 = new Event(EventType.valueOf(type1), "TITLE1", "PROP1", dateDebut, 30, "LIEU1", "PART1", 0);
-        Event e2 = new Event(EventType.valueOf(type2), "TITLE2", "PROP2", dateDebut, 30, "LIEU2", "PART2", 0);
+        Event e1 = new Event(EventType.valueOf(type1), new EventTitle("TITLE1"), "PROP1", dateDebut, 30, "LIEU1", "PART1", 0);
+        Event e2 = new Event(EventType.valueOf(type2), new EventTitle("TITLE2"), "PROP2", dateDebut, 30, "LIEU2", "PART2", 0);
 
         boolean output = calendarManager.conflit(e1, e2);
 
