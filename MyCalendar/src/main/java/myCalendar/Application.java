@@ -28,7 +28,7 @@ public class Application {
     public void run() {
         while (running) {
             if (auth.isAuthenticated()) {
-                authenticatedStartmenu();
+                authenticatedStartMenu();
             } else {
                 startMenu();
             }
@@ -79,7 +79,7 @@ public class Application {
             System.err.println("Nom d'utilisateur ou mot de passe incorrect.");
     }
 
-    private void authenticatedStartmenu() {
+    private void authenticatedStartMenu() {
         System.out.printf("""
                 Bonjour, %s
                 === Menu Gestionnaire d'Événements ===
@@ -113,7 +113,7 @@ public class Application {
         EventTitle title = new EventTitle(readString(PROMPT_TITRE_EVENEMENT));
         EventDateTime dateDebut = readDateTime();
         EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
-        EventFrequency frequence = new EventFrequency(readInt("Frequence (en jours) : "));
+        EventFrequency frequence = new EventFrequency(readInt("Fréquence (en jours) : "));
 
         calendar.ajouterPeriodique(title, auth.getCurrentUser(), dateDebut, duree, frequence);
 
