@@ -2,10 +2,11 @@ package myCalendar;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Authenticator {
 
-    private EventOwner currentUser;
+    private Optional<EventOwner> currentUser = Optional.empty();
     private final Map<EventOwner, String> accounts = new HashMap<>();
 
     public Authenticator() {
@@ -30,19 +31,19 @@ public class Authenticator {
         if (!accounts.get(owner).equals(password))
             return false;
 
-        currentUser = owner;
+        currentUser = Optional.of(owner);
         return true;
     }
 
     public void disconnect() {
-        currentUser = null;
+        currentUser = Optional.empty();
     }
 
     public boolean isAuthenticated() {
-        return currentUser != null;
+        return currentUser.isPresent();
     }
 
     public EventOwner getCurrentUser() {
-        return currentUser;
+        return currentUser.orElseThrow(() -> new IllegalStateException("Aucun utilisateur connecté."));
     }
 }

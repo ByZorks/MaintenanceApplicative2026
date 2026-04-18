@@ -1,8 +1,11 @@
 package myCalendar;
 
+import java.util.Objects;
+
 public record EventOwner(String valeur) {
     public EventOwner {
-        if (valeur == null || valeur.isBlank())
+        Objects.requireNonNull(valeur, "Le propriétaire ne peut pas être vide.");
+        if (valeur.isBlank())
             throw new IllegalArgumentException("Le propriétaire ne peut pas être vide.");
     }
 

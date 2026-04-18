@@ -1,11 +1,11 @@
 package myCalendar;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public record EventDateTime(LocalDateTime valeur) {
     public EventDateTime {
-        if  (valeur == null)
-            throw new IllegalArgumentException("La date/heure ne peut être nulle.");
+        Objects.requireNonNull(valeur, "La date/heure ne peut être nulle.");
     }
 
     public boolean isBefore(EventDateTime other) {

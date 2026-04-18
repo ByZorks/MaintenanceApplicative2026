@@ -1,10 +1,12 @@
 package myCalendar;
 
 import java.util.List;
+import java.util.Objects;
 
 public record EventParticipants(List<EventOwner> liste) {
     public EventParticipants {
-        if (liste == null || liste.isEmpty())
+        Objects.requireNonNull(liste, "La liste des participants ne peut être nulle ou vide.");
+        if (liste.isEmpty())
             throw new IllegalArgumentException("La liste des participants ne peut être nulle ou vide.");
 
         liste = List.copyOf(liste); // Pour l'immutabilité

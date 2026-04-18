@@ -1,8 +1,11 @@
 package myCalendar;
 
+import java.util.Objects;
+
 public record EventLocation(String valeur) {
     public EventLocation {
-        if (valeur == null || valeur.isBlank())
+        Objects.requireNonNull(valeur, "Le lieu ne peut être nul ou vide.");
+        if (valeur.isBlank())
             throw new IllegalArgumentException("Le lieu ne peut être nul ou vide.");
     }
 
