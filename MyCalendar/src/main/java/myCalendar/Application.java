@@ -2,6 +2,7 @@ package myCalendar;
 
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -11,9 +12,10 @@ public class Application {
     private final CalendarManager calendar = new CalendarManager();
     private final Authenticator auth =  new Authenticator();
     private final Scanner scanner = new Scanner(System.in);
+    private boolean running = true;
 
     public void run() {
-        while (true) {
+        while (running) {
             if (auth.isAuthenticated()) {
                 authenticatedStartmenu();
             } else {
@@ -34,11 +36,13 @@ public class Application {
                                                                                                             |___/
                         
                         1 - Se connecter
-                        2 - Créer un compte""");
+                        2 - Créer un compte
+                        3 - Quitter""");
         int choix = readInt("Choix :");
         switch (choix) {
             case 1 -> login();
             case 2 -> createAccount();
+            case 3 -> running = false;
             default -> System.err.println("Choix invalide");
         }
     }
@@ -75,18 +79,78 @@ public class Application {
         int choix = readInt("Votre choix :");
         switch (choix) {
             case 1 -> listEvents();
-            case 2 -> System.out.println("Fonctionnalité non implémentée.");
-            case 3 -> System.out.println("Fonctionnalité non implémentée.");
-            case 4 -> System.out.println("Fonctionnalité non implémentée.");
-            case 5 -> {
-                String disconnect = readString("Déconnexion ! Voulez-vous continuer ? (O/N)");
-                switch (disconnect.toUpperCase()) {
-                    case "O" -> auth.disconnect();
-                    case "N" -> System.out.println("Déconnexion annulée.");
-                    default -> System.err.println("Choix invalide, déconnexion annulée.");
-                }
-            }
+            case 2 -> ajouterRDVPersonnel();
+            case 3 -> ajouterReunion();
+            case 4 -> ajouterEventPeriodique();
+            case 5 -> disconnect();
+            default -> System.err.println("Choix invalide");
         }
+    }
+
+    private void disconnect() {
+        String disconnect = readString("Déconnexion ! Confirmer la déconnexion ? (O/N)");
+        switch (disconnect.toUpperCase()) {
+            case "O" -> auth.disconnect();
+            case "N" -> System.out.println("Déconnexion annulée.");
+            default -> System.err.println("Choix invalide, déconnexion annulée.");
+        }
+    }
+
+    private void ajouterEventPeriodique() {
+        EventTitle title = new EventTitle(readString("Titre de l'événement : "));
+        int annee = readInt("Année (AAAA) : ");
+        int mois = readInt("Mois (1-12) : ");
+        int jour = readInt("Jour (1-31) : ");
+        int heure = readInt("Heure début (0-23) : ");
+        int minute = readInt("Minute début (0-59) : ");
+        EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
+        EventFrequency frequence = new EventFrequency(readInt("Frequence (en jours) : "));
+
+        calendar.ajouterPeriodique(title, auth.getCurrentUser(),
+                new EventDateTime(LocalDateTime.of(annee, mois, jour, heure, minute)), duree, frequence);
+
+        System.out.println("Événement ajouté.");
+    }
+
+    private void ajouterReunion() {
+        EventTitle title = new EventTitle(readString("Titre de l'événement : "));
+        int annee = readInt("Année (AAAA) : ");
+        int mois = readInt("Mois (1-12) : ");
+        int jour = readInt("Jour (1-31) : ");
+        int heure = readInt("Heure début (0-23) : ");
+        int minute = readInt("Minute début (0-59) : ");
+        EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
+        EventLocation lieu = new EventLocation(readString("Lieu :"));
+
+        System.out.println("Ajouter un participant ? (oui / non)");
+        List<String> participants = new ArrayList<>();
+        participants.add(auth.getCurrentUser().toString());
+        while (scanner.nextLine().equalsIgnoreCase("oui")) {
+            System.out.print("Participants : " + participants);
+            participants.add(readString("Nom du participant : "));
+            System.out.println("Ajouter un participant ? (oui / non)");
+        }
+
+        calendar.ajouterReunion(title, auth.getCurrentUser(),
+                new EventDateTime(LocalDateTime.of(annee, mois, jour, heure, minute)), duree,
+                lieu, new EventParticipants(participants));
+
+        System.out.println("Événement ajouté.");
+    }
+
+    private void ajouterRDVPersonnel() {
+        EventTitle title = new EventTitle(readString("Titre de l'événement : "));
+        int annee = readInt("Année (AAAA) : ");
+        int mois = readInt("Mois (1-12) : ");
+        int jour = readInt("Jour (1-31) : ");
+        int heure = readInt("Heure début (0-23) : ");
+        int minute = readInt("Minute début (0-59) : ");
+        EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
+
+        calendar.ajouterRdvPersonnel(title, auth.getCurrentUser(),
+                new EventDateTime(LocalDateTime.of(annee, mois, jour, heure, minute)), duree);
+
+        System.out.println("Événement ajouté.");
     }
 
     private void listEvents() {
