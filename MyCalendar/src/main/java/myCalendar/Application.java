@@ -10,6 +10,16 @@ import java.util.Scanner;
 
 public class Application {
 
+    private static final String MSG_CHOIX_INVALIDE = "Choix invalide";
+    private static final String MSG_EVENEMENT_AJOUTE = "Événement ajouté.";
+    private static final String PROMPT_TITRE_EVENEMENT = "Titre de l'événement : ";
+    private static final String PROMPT_DUREE_MINUTES = "Durée (en minutes) : ";
+    private static final String PROMPT_ANNEE = "Année (AAAA) :";
+    private static final String PROMPT_MOIS = "Mois (1-12) : ";
+    private static final String PROMPT_JOUR = "Jour (1-31) : ";
+    private static final String PROMPT_NOM = "Nom :";
+    private static final String PROMPT_MDP = "Mot de passe :";
+
     private final CalendarManager calendar = new CalendarManager();
     private final Authenticator auth =  new Authenticator();
     private final Scanner scanner = new Scanner(System.in);
@@ -45,13 +55,13 @@ public class Application {
             case 1 -> login();
             case 2 -> createAccount();
             case 3 -> running = false;
-            default -> System.err.println("Choix invalide");
+            default -> System.err.println(MSG_CHOIX_INVALIDE);
         }
     }
 
     private void createAccount() {
-        String name = readString("Entrez votre nom :");
-        String password = readString("Entrez votre mot de passe :");
+        String name = readString(PROMPT_NOM);
+        String password = readString(PROMPT_MDP);
 
         boolean accountCreated = auth.createAccount(name, password);
 
@@ -60,8 +70,8 @@ public class Application {
     }
 
     private void login() {
-        String name = readString("Entrez votre nom :");
-        String password = readString("Entrez votre mot de passe :");
+        String name = readString(PROMPT_NOM);
+        String password = readString(PROMPT_MDP);
 
         boolean loggedIn = auth.login(name, password);
 
@@ -86,7 +96,7 @@ public class Application {
             case 3 -> ajouterReunion();
             case 4 -> ajouterEventPeriodique();
             case 5 -> disconnect();
-            default -> System.err.println("Choix invalide");
+            default -> System.err.println(MSG_CHOIX_INVALIDE);
         }
     }
 
@@ -100,22 +110,22 @@ public class Application {
     }
 
     private void ajouterEventPeriodique() {
-        EventTitle title = new EventTitle(readString("Titre de l'événement : "));
+        EventTitle title = new EventTitle(readString(PROMPT_TITRE_EVENEMENT));
         EventDateTime dateDebut = readDateTime();
-        EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
+        EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
         EventFrequency frequence = new EventFrequency(readInt("Frequence (en jours) : "));
 
         calendar.ajouterPeriodique(title, auth.getCurrentUser(), dateDebut, duree, frequence);
 
-        System.out.println("Événement ajouté.");
+        System.out.println(MSG_EVENEMENT_AJOUTE);
     }
 
     private EventDateTime readDateTime() {
         while (true) {
             try {
-                int annee = readInt("Année (AAAA) : ");
-                int mois = readInt("Mois (1-12) : ");
-                int jour = readInt("Jour (1-31) : ");
+                int annee = readInt(PROMPT_ANNEE);
+                int mois = readInt(PROMPT_MOIS);
+                int jour = readInt(PROMPT_JOUR);
                 int heure = readInt("Heure début (0-23) : ");
                 int minute = readInt("Minute début (0-59) : ");
 
@@ -128,9 +138,9 @@ public class Application {
     }
 
     private void ajouterReunion() {
-        EventTitle title = new EventTitle(readString("Titre de l'événement : "));
+        EventTitle title = new EventTitle(readString(PROMPT_TITRE_EVENEMENT));
         EventDateTime dateDebut = readDateTime();
-        EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
+        EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
         EventLocation lieu = new EventLocation(readString("Lieu :"));
 
         List<EventOwner> participants = new ArrayList<>();
@@ -142,17 +152,17 @@ public class Application {
 
         calendar.ajouterReunion(title, auth.getCurrentUser(), dateDebut, duree, lieu, new EventParticipants(participants));
 
-        System.out.println("Événement ajouté.");
+        System.out.println(MSG_EVENEMENT_AJOUTE);
     }
 
     private void ajouterRDVPersonnel() {
-        EventTitle title = new EventTitle(readString("Titre de l'événement : "));
+        EventTitle title = new EventTitle(readString(PROMPT_TITRE_EVENEMENT));
         EventDateTime dateDebut = readDateTime();
-        EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
+        EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
 
         calendar.ajouterRdvPersonnel(title, auth.getCurrentUser(), dateDebut, duree);
 
-        System.out.println("Événement ajouté.");
+        System.out.println(MSG_EVENEMENT_AJOUTE);
     }
 
     private void listEvents() {
@@ -170,36 +180,63 @@ public class Application {
             switch (choix) {
                 case 1 -> calendar.afficherEvenements();
                 case 2 -> {
-                    int annee = readInt("Entrez l'année (AAAA) :");
-                    int mois = readInt("Entrez le mois (1-12) :");
-
-                    EventDateTime debut = new EventDateTime(LocalDateTime.of(annee, mois, 1, 0, 0));
+                    EventDateTime debut = readMonthStartDateTime();
                     EventDateTime fin = debut.plusMonths(1).minusSeconds(1);
                     afficherListe(calendar.eventsDansPeriode(debut, fin));
                 }
                 case 3 -> {
-                    int annee = readInt("Entrez l'année (AAAA) :");
-                    int semaine = readInt("Entrez la semaine (1-52) :");
-
-                    EventDateTime debut = new EventDateTime(LocalDateTime.now()
-                            .withYear(annee)
-                            .with(WeekFields.of(Locale.FRANCE).weekOfYear(), semaine)
-                            .with(WeekFields.of(Locale.FRANCE).dayOfWeek(), 1)
-                            .withHour(0).withMinute(0));
+                    EventDateTime debut = readWeekStartDateTime();
                     EventDateTime fin = debut.plusDays(7).minusSeconds(1);
                     afficherListe(calendar.eventsDansPeriode(debut, fin));
                 }
                 case 4 -> {
-                    int annee = readInt("Entrez l'année (AAAA) :");
-                    int mois = readInt("Entrez le mois (1-12) :");
-                    int jour = readInt("Entrez le jour (1-31) :");
-
-                    EventDateTime debut = new EventDateTime(LocalDateTime.of(annee, mois, jour, 0, 0));
+                    EventDateTime debut = readDayStartDateTime();
                     EventDateTime fin = debut.plusDays(1).minusSeconds(1);
                     afficherListe(calendar.eventsDansPeriode(debut, fin));
                 }
                 case 5 -> quit = true;
-                default -> System.err.println("Choix invalide");
+                default -> System.err.println(MSG_CHOIX_INVALIDE);
+            }
+        }
+    }
+
+    private EventDateTime readMonthStartDateTime() {
+        while (true) {
+            try {
+                int annee = readInt(PROMPT_ANNEE);
+                int mois = readInt(PROMPT_MOIS);
+                return new EventDateTime(LocalDateTime.of(annee, mois, 1, 0, 0));
+            } catch (DateTimeException _) {
+                System.err.println("Mois invalide.");
+            }
+        }
+    }
+
+    private EventDateTime readWeekStartDateTime() {
+        while (true) {
+            try {
+                int annee = readInt(PROMPT_ANNEE);
+                int semaine = readInt("Entrez la semaine (1-52) :");
+                return new EventDateTime(LocalDateTime.now()
+                        .withYear(annee)
+                        .with(WeekFields.of(Locale.FRANCE).weekOfYear(), semaine)
+                        .with(WeekFields.of(Locale.FRANCE).dayOfWeek(), 1)
+                        .withHour(0).withMinute(0));
+            } catch (DateTimeException _) {
+                System.err.println("Semaine invalide.");
+            }
+        }
+    }
+
+    private EventDateTime readDayStartDateTime() {
+        while (true) {
+            try {
+                int annee = readInt(PROMPT_ANNEE);
+                int mois = readInt(PROMPT_MOIS);
+                int jour = readInt(PROMPT_JOUR);
+                return new EventDateTime(LocalDateTime.of(annee, mois, jour, 0, 0));
+            } catch (DateTimeException _) {
+                System.err.println("Date invalide.");
             }
         }
     }
