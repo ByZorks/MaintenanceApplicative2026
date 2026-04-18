@@ -38,7 +38,8 @@ public class Application {
                         
                         1 - Se connecter
                         2 - Créer un compte
-                        3 - Quitter""");
+                        3 - Quitter
+                        """);
         int choix = readInt("Choix :");
         switch (choix) {
             case 1 -> login();
@@ -76,7 +77,8 @@ public class Application {
                 2 - Ajouter un rendez-vous perso
                 3 - Ajouter une réunion
                 4 - Ajouter un évènement périodique
-                5 - Se déconnecter""", auth.getCurrentUser());
+                5 - Se déconnecter
+                """, auth.getCurrentUser());
         int choix = readInt("Votre choix :");
         switch (choix) {
             case 1 -> listEvents();
@@ -131,12 +133,11 @@ public class Application {
         EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
         EventLocation lieu = new EventLocation(readString("Lieu :"));
 
-        System.out.println("Ajouter un participant ? (oui / non)");
-        List<String> participants = new ArrayList<>();
-        participants.add(auth.getCurrentUser().toString());
+        List<EventOwner> participants = new ArrayList<>();
+        participants.add(auth.getCurrentUser());
         while (readString("Ajouter un participant ? (oui / non)").equalsIgnoreCase("oui")) {
-            System.out.print("Participants : " + participants);
-            participants.add(readString("Nom du participant : "));
+            System.out.println("Participants : " + participants);
+            participants.add(new EventOwner(readString("Nom du participant : ")));
         }
 
         calendar.ajouterReunion(title, auth.getCurrentUser(), dateDebut, duree, lieu, new EventParticipants(participants));

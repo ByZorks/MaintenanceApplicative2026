@@ -35,7 +35,7 @@ class CalendarManagerTest {
                 new EventDateTime(LocalDateTime.parse("2018-05-10T14:30:00")),
                 new EventDuration(60),
                 new EventLocation("LIEU3"),
-                new EventParticipants(List.of("PARTICIPANTS3"))
+                new EventParticipants(List.of(new EventOwner("PARTICIPANTS3")))
         );
     }
 
@@ -83,7 +83,7 @@ class CalendarManagerTest {
                 new EventDateTime(LocalDateTime.parse(debutE1)),
                 new EventDuration(dureeE1),
                 new EventLocation("LIEU1"),
-                new EventParticipants(List.of("PART1"))
+                new EventParticipants(List.of(new EventOwner("PART1")))
         );
         Event e2 = new Reunion(
                 new EventTitle("TITLE2"),
@@ -91,7 +91,7 @@ class CalendarManagerTest {
                 new EventDateTime(LocalDateTime.parse("2018-05-05T12:00:00")),
                 new EventDuration(30),
                 new EventLocation("LIEU2"),
-                new EventParticipants(List.of("PART2"))
+                new EventParticipants(List.of(new EventOwner("PART2")))
         );
 
         boolean output = calendarManager.conflit(e1, e2);
@@ -122,7 +122,7 @@ class CalendarManagerTest {
                     dateDebut,
                     new EventDuration(30),
                     new EventLocation("LIEU"),
-                    new EventParticipants(List.of("PART"))
+                    new EventParticipants(List.of(new EventOwner("PART")))
             );
             case "PERIODIQUE" -> new Periodique(
                     new EventTitle(titre),

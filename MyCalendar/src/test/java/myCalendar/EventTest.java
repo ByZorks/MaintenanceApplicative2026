@@ -28,7 +28,7 @@ class EventTest {
                 new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")),
                 new EventDuration(30),
                 new EventLocation("LIEU"),
-                new EventParticipants(List.of("PARTICIPANTS1", "PARTICIPANTS2", "PARTICIPANTS3"))
+                new EventParticipants(List.of(new EventOwner("PARTICIPANTS1"), new EventOwner("PARTICIPANTS2"), new EventOwner("PARTICIPANTS3")))
         );
         assertEquals("Réunion : TITLE à LIEU avec PARTICIPANTS1, PARTICIPANTS2, PARTICIPANTS3", event.description());
     }
