@@ -1,5 +1,6 @@
 package myCalendar;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
@@ -98,57 +99,57 @@ public class Application {
 
     private void ajouterEventPeriodique() {
         EventTitle title = new EventTitle(readString("Titre de l'événement : "));
-        int annee = readInt("Année (AAAA) : ");
-        int mois = readInt("Mois (1-12) : ");
-        int jour = readInt("Jour (1-31) : ");
-        int heure = readInt("Heure début (0-23) : ");
-        int minute = readInt("Minute début (0-59) : ");
+        EventDateTime dateDebut = readDateTime();
         EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
         EventFrequency frequence = new EventFrequency(readInt("Frequence (en jours) : "));
 
-        calendar.ajouterPeriodique(title, auth.getCurrentUser(),
-                new EventDateTime(LocalDateTime.of(annee, mois, jour, heure, minute)), duree, frequence);
+        calendar.ajouterPeriodique(title, auth.getCurrentUser(), dateDebut, duree, frequence);
 
         System.out.println("Événement ajouté.");
     }
 
+    private EventDateTime readDateTime() {
+        while (true) {
+            try {
+                int annee = readInt("Année (AAAA) : ");
+                int mois = readInt("Mois (1-12) : ");
+                int jour = readInt("Jour (1-31) : ");
+                int heure = readInt("Heure début (0-23) : ");
+                int minute = readInt("Minute début (0-59) : ");
+
+                LocalDateTime dateTime = LocalDateTime.of(annee, mois, jour, heure, minute);
+                return new EventDateTime(dateTime);
+            } catch (DateTimeException _) {
+                System.err.println("Date invalide.");
+            }
+        }
+    }
+
     private void ajouterReunion() {
         EventTitle title = new EventTitle(readString("Titre de l'événement : "));
-        int annee = readInt("Année (AAAA) : ");
-        int mois = readInt("Mois (1-12) : ");
-        int jour = readInt("Jour (1-31) : ");
-        int heure = readInt("Heure début (0-23) : ");
-        int minute = readInt("Minute début (0-59) : ");
+        EventDateTime dateDebut = readDateTime();
         EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
         EventLocation lieu = new EventLocation(readString("Lieu :"));
 
         System.out.println("Ajouter un participant ? (oui / non)");
         List<String> participants = new ArrayList<>();
         participants.add(auth.getCurrentUser().toString());
-        while (scanner.nextLine().equalsIgnoreCase("oui")) {
+        while (readString("Ajouter un participant ? (oui / non)").equalsIgnoreCase("oui")) {
             System.out.print("Participants : " + participants);
             participants.add(readString("Nom du participant : "));
-            System.out.println("Ajouter un participant ? (oui / non)");
         }
 
-        calendar.ajouterReunion(title, auth.getCurrentUser(),
-                new EventDateTime(LocalDateTime.of(annee, mois, jour, heure, minute)), duree,
-                lieu, new EventParticipants(participants));
+        calendar.ajouterReunion(title, auth.getCurrentUser(), dateDebut, duree, lieu, new EventParticipants(participants));
 
         System.out.println("Événement ajouté.");
     }
 
     private void ajouterRDVPersonnel() {
         EventTitle title = new EventTitle(readString("Titre de l'événement : "));
-        int annee = readInt("Année (AAAA) : ");
-        int mois = readInt("Mois (1-12) : ");
-        int jour = readInt("Jour (1-31) : ");
-        int heure = readInt("Heure début (0-23) : ");
-        int minute = readInt("Minute début (0-59) : ");
+        EventDateTime dateDebut = readDateTime();
         EventDuration duree = new EventDuration(readInt("Durée (en minutes) : "));
 
-        calendar.ajouterRdvPersonnel(title, auth.getCurrentUser(),
-                new EventDateTime(LocalDateTime.of(annee, mois, jour, heure, minute)), duree);
+        calendar.ajouterRdvPersonnel(title, auth.getCurrentUser(), dateDebut, duree);
 
         System.out.println("Événement ajouté.");
     }
