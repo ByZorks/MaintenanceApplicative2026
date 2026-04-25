@@ -16,12 +16,14 @@ public class Deplacement extends Event {
 
     @Override
     public boolean estDansPeriode(EventDateTime debut, EventDateTime fin) {
-        throw new UnsupportedOperationException();
+        return !dateDebut.isBefore(debut) && !dateDebut.isAfter(fin);
     }
 
     @Override
     public boolean chevauche(Event other) {
-        throw new UnsupportedOperationException();
+        EventDateTime thisEnd = dateDebut.plusMinutes(dureeMinutes.valeur());
+        EventDateTime otherEnd = other.dateDebut.plusMinutes(other.dureeMinutes.valeur());
+        return dateDebut.isBefore(otherEnd) && thisEnd.isAfter(other.getDateDebut());
     }
 }
 

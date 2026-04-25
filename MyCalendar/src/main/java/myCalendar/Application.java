@@ -87,7 +87,8 @@ public class Application {
                 2 - Ajouter un rendez-vous perso
                 3 - Ajouter une réunion
                 4 - Ajouter un évènement périodique
-                5 - Se déconnecter
+                5 - Ajouter un déplacement
+                6 - Se déconnecter
                 """, auth.getCurrentUser());
         int choix = readInt("Votre choix :");
         switch (choix) {
@@ -95,9 +96,21 @@ public class Application {
             case 2 -> ajouterRDVPersonnel();
             case 3 -> ajouterReunion();
             case 4 -> ajouterEventPeriodique();
-            case 5 -> disconnect();
+            case 5 -> ajouterDeplacement();
+            case 6 -> disconnect();
             default -> System.err.println(MSG_CHOIX_INVALIDE);
         }
+    }
+
+    private void ajouterDeplacement() {
+        EventTitle title = new EventTitle(readString(PROMPT_TITRE_EVENEMENT));
+        EventDateTime dateDebut = readDateTime();
+        EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
+        EventLocation destination = new EventLocation(readString("Destination :"));
+
+        calendar.ajouterDeplacement(title, auth.getCurrentUser(), dateDebut, duree, destination);
+
+        System.out.println(MSG_EVENEMENT_AJOUTE);
     }
 
     private void disconnect() {

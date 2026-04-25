@@ -22,6 +22,10 @@ public class CalendarManager {
         events.add(new Periodique(title, proprietaire, dateDebut, dureeMinutes, frequenceJours));
     }
 
+    public void ajouterDeplacement(EventTitle title, EventOwner proprietaire, EventDateTime dateDebut, EventDuration dureeMinutes, EventLocation destination) {
+        events.add(new Deplacement(title, proprietaire, dateDebut, dureeMinutes, destination));
+    }
+
     public List<Event> eventsDansPeriode(EventDateTime debut, EventDateTime fin) {
         return events.stream()
                 .filter(e -> e.estDansPeriode(debut, fin))
