@@ -11,6 +11,12 @@ public class Reunion extends Event{
         this.participants = participants;
     }
 
+    public Reunion(EventId id, EventTitle title, EventOwner proprietaire, EventDateTime dateDebut, EventDuration dureeMinutes, EventLocation lieu, EventParticipants participants) {
+        super(id, title, proprietaire, dateDebut, dureeMinutes);
+        this.lieu = lieu;
+        this.participants = participants;
+    }
+
     @Override
     public String description() {
         return "Réunion : " + title + " à " + lieu + " avec " + participants;

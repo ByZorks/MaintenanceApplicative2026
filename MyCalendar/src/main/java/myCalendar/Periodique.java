@@ -9,6 +9,11 @@ public class Periodique extends Event {
         this.frequenceJours = frequenceJours;
     }
 
+    public Periodique(EventId id, EventTitle title, EventOwner proprietaire, EventDateTime dateDebut, EventDuration dureeMinutes, EventFrequency frequenceJours) {
+        super(id, title, proprietaire, dateDebut, dureeMinutes);
+        this.frequenceJours = frequenceJours;
+    }
+
     @Override
     public String description() {
         return "Événement périodique : " + title + " tous les " + frequenceJours + " jours";

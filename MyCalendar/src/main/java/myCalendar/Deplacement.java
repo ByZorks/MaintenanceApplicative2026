@@ -9,6 +9,11 @@ public class Deplacement extends Event {
         this.destination = destination;
     }
 
+    public Deplacement(EventId id, EventTitle title, EventOwner proprietaire, EventDateTime dateDebut, EventDuration dureeMinutes, EventLocation destination) {
+        super(id, title, proprietaire, dateDebut, dureeMinutes);
+        this.destination = destination;
+    }
+
     @Override
     public String description() {
         return "Déplacement : " + title + " vers " + destination;
