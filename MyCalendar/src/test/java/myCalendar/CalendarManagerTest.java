@@ -1,6 +1,7 @@
 package myCalendar;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -8,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CalendarManagerTest {
 
@@ -114,6 +117,59 @@ class CalendarManagerTest {
         Event e2 = creerEvent(type2, "TITLE2", dateDebut);
 
         assertEquals(expected, calendarManager.conflit(e1, e2));
+    }
+
+    @Test
+    void test_ajout_refuse_si_conflit_detecte() {
+        CalendarManager manager = new CalendarManager();
+        manager.ajouterReunion(
+                new EventTitle("REUNION EXISTANTE"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T12:00:00")),
+                new EventDuration(30),
+                new EventLocation("LIEU"),
+                new EventParticipants(List.of(new EventOwner("PART")))
+        );
+
+        boolean ajoute = manager.ajouterRdvPersonnel(
+                new EventTitle("RDV CONFLIT"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T12:15:00")),
+                new EventDuration(15)
+        );
+
+        assertFalse(ajoute);
+        assertEquals(1, manager.eventsDansPeriode(
+                new EventDateTime(LocalDateTime.parse("2018-05-05T00:00:00")),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T23:59:59"))
+        ).size());
+    }
+
+    @Test
+    void test_ajout_accepte_si_aucun_conflit() {
+        CalendarManager manager = new CalendarManager();
+        manager.ajouterReunion(
+                new EventTitle("REUNION EXISTANTE"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T12:00:00")),
+                new EventDuration(30),
+                new EventLocation("LIEU"),
+                new EventParticipants(List.of(new EventOwner("PART")))
+        );
+
+        boolean ajoute = manager.ajouterDeplacement(
+                new EventTitle("DEPLACEMENT"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T14:00:00")),
+                new EventDuration(15),
+                new EventLocation("DESTINATION")
+        );
+
+        assertTrue(ajoute);
+        assertEquals(2, manager.eventsDansPeriode(
+                new EventDateTime(LocalDateTime.parse("2018-05-05T00:00:00")),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T23:59:59"))
+        ).size());
     }
 
     @ParameterizedTest(name = "déplacement dans période début {0} - fin {1} -> {2}")
