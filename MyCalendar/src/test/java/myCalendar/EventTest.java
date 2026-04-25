@@ -56,4 +56,17 @@ class EventTest {
         );
         assertEquals("Déplacement : TITLE vers LYON", event.description());
     }
+
+    @Test
+    void test_eventId_explicite_est_conserve() {
+        EventId id = new EventId("EVENT-123");
+        Event event = new RdvPersonnel(
+                id,
+                new EventTitle("TITLE"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")),
+                new EventDuration(30)
+        );
+        assertEquals(id, event.getId());
+    }
 }

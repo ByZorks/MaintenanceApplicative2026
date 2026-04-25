@@ -172,6 +172,57 @@ class CalendarManagerTest {
         ).size());
     }
 
+    @Test
+    void test_supprimerEvenement_par_id() {
+        CalendarManager manager = new CalendarManager();
+        EventId id1 = new EventId("EVENT-1");
+        EventId id2 = new EventId("EVENT-2");
+
+        manager.ajouterRdvPersonnel(
+                id1,
+                new EventTitle("RDV 1"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T08:00:00")),
+                new EventDuration(30)
+        );
+        manager.ajouterDeplacement(
+                id2,
+                new EventTitle("DEPLACEMENT 2"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T10:00:00")),
+                new EventDuration(45),
+                new EventLocation("PARIS")
+        );
+
+        boolean supprime = manager.supprimerEvenement(id1);
+
+        assertTrue(supprime);
+        assertEquals(1, manager.eventsDansPeriode(
+                new EventDateTime(LocalDateTime.parse("2018-05-05T00:00:00")),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T23:59:59"))
+        ).size());
+    }
+
+    @Test
+    void test_supprimerEvenement_id_inconnu_ne_change_rien() {
+        CalendarManager manager = new CalendarManager();
+        manager.ajouterRdvPersonnel(
+                new EventId("EVENT-1"),
+                new EventTitle("RDV 1"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T08:00:00")),
+                new EventDuration(30)
+        );
+
+        boolean supprime = manager.supprimerEvenement(new EventId("EVENT-UNKNOWN"));
+
+        assertFalse(supprime);
+        assertEquals(1, manager.eventsDansPeriode(
+                new EventDateTime(LocalDateTime.parse("2018-05-05T00:00:00")),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T23:59:59"))
+        ).size());
+    }
+
     @ParameterizedTest(name = "déplacement dans période début {0} - fin {1} -> {2}")
     @CsvSource({
             "2018-06-01T00:00:00, 2018-06-30T23:59:59, 1",
