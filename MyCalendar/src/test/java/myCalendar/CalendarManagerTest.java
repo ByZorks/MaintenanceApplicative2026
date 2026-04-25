@@ -104,6 +104,8 @@ class CalendarManagerTest {
             "REUNION,       REUNION,        true",
             "PERIODIQUE,    REUNION,        true",
             "REUNION,       PERIODIQUE,     true",
+            "DEPLACEMENT,   REUNION,        true",
+            "REUNION,       DEPLACEMENT,    true",
     })
     void test_conflit_type(String type1, String type2, boolean expected) {
         EventDateTime dateDebut = new EventDateTime(LocalDateTime.parse("2018-05-05T12:00:00"));
@@ -112,6 +114,29 @@ class CalendarManagerTest {
         Event e2 = creerEvent(type2, "TITLE2", dateDebut);
 
         assertEquals(expected, calendarManager.conflit(e1, e2));
+    }
+
+    @ParameterizedTest(name = "déplacement dans période début {0} - fin {1} -> {2}")
+    @CsvSource({
+            "2018-06-01T00:00:00, 2018-06-30T23:59:59, 1",
+            "2018-07-01T00:00:00, 2018-07-31T23:59:59, 0"
+    })
+    void test_ajouterDeplacement_eventsDansPeriode(String debut, String fin, int expectedCount) {
+        CalendarManager manager = new CalendarManager();
+        manager.ajouterDeplacement(
+                new EventTitle("MISSION CLIENT"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-06-15T08:00:00")),
+                new EventDuration(120),
+                new EventLocation("PARIS")
+        );
+
+        List<Event> output = manager.eventsDansPeriode(
+                new EventDateTime(LocalDateTime.parse(debut)),
+                new EventDateTime(LocalDateTime.parse(fin))
+        );
+
+        assertEquals(expectedCount, output.size());
     }
 
     private Event creerEvent(String type, String titre, EventDateTime dateDebut) {
@@ -130,6 +155,13 @@ class CalendarManagerTest {
                     dateDebut,
                     new EventDuration(30),
                     new EventFrequency(7)
+            );
+            case "DEPLACEMENT" -> new Deplacement(
+                    new EventTitle(titre),
+                    new EventOwner("PROPRIETAIRE"),
+                    dateDebut,
+                    new EventDuration(30),
+                    new EventLocation("DESTINATION")
             );
             default -> new RdvPersonnel(
                     new EventTitle(titre),

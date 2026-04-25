@@ -44,4 +44,16 @@ class EventTest {
         );
         assertEquals("Événement périodique : TITLE tous les 7 jours", event.description());
     }
+
+    @Test
+    void test_description_deplacement() {
+        Event event = new Deplacement(
+                new EventTitle("TITLE"),
+                new EventOwner("PROPRIETAIRE"),
+                new EventDateTime(LocalDateTime.parse("2018-05-05T11:50:55")),
+                new EventDuration(30),
+                new EventLocation("LYON")
+        );
+        assertEquals("Déplacement : TITLE vers LYON", event.description());
+    }
 }
