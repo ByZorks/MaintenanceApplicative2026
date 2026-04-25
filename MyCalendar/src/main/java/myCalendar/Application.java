@@ -12,6 +12,7 @@ public class Application {
 
     private static final String MSG_CHOIX_INVALIDE = "Choix invalide";
     private static final String MSG_EVENEMENT_AJOUTE = "Événement ajouté.";
+    private static final String MSG_CONFLIT_AJOUT = "Ajout refusé : conflit horaire avec un événement existant.";
     private static final String PROMPT_TITRE_EVENEMENT = "Titre de l'événement : ";
     private static final String PROMPT_DUREE_MINUTES = "Durée (en minutes) : ";
     private static final String PROMPT_ANNEE = "Année (AAAA) :";
@@ -108,9 +109,7 @@ public class Application {
         EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
         EventLocation destination = new EventLocation(readString("Destination :"));
 
-        calendar.ajouterDeplacement(title, auth.getCurrentUser(), dateDebut, duree, destination);
-
-        System.out.println(MSG_EVENEMENT_AJOUTE);
+        afficherResultatAjout(calendar.ajouterDeplacement(title, auth.getCurrentUser(), dateDebut, duree, destination));
     }
 
     private void disconnect() {
@@ -128,9 +127,7 @@ public class Application {
         EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
         EventFrequency frequence = new EventFrequency(readInt("Fréquence (en jours) : "));
 
-        calendar.ajouterPeriodique(title, auth.getCurrentUser(), dateDebut, duree, frequence);
-
-        System.out.println(MSG_EVENEMENT_AJOUTE);
+        afficherResultatAjout(calendar.ajouterPeriodique(title, auth.getCurrentUser(), dateDebut, duree, frequence));
     }
 
     private EventDateTime readDateTime() {
@@ -163,9 +160,7 @@ public class Application {
             participants.add(new EventOwner(readString("Nom du participant : ")));
         }
 
-        calendar.ajouterReunion(title, auth.getCurrentUser(), dateDebut, duree, lieu, new EventParticipants(participants));
-
-        System.out.println(MSG_EVENEMENT_AJOUTE);
+        afficherResultatAjout(calendar.ajouterReunion(title, auth.getCurrentUser(), dateDebut, duree, lieu, new EventParticipants(participants)));
     }
 
     private void ajouterRDVPersonnel() {
@@ -173,9 +168,15 @@ public class Application {
         EventDateTime dateDebut = readDateTime();
         EventDuration duree = new EventDuration(readInt(PROMPT_DUREE_MINUTES));
 
-        calendar.ajouterRdvPersonnel(title, auth.getCurrentUser(), dateDebut, duree);
+        afficherResultatAjout(calendar.ajouterRdvPersonnel(title, auth.getCurrentUser(), dateDebut, duree));
+    }
 
-        System.out.println(MSG_EVENEMENT_AJOUTE);
+    private void afficherResultatAjout(boolean ajoute) {
+        if (ajoute) {
+            System.out.println(MSG_EVENEMENT_AJOUTE);
+        } else {
+            System.err.println(MSG_CONFLIT_AJOUT);
+        }
     }
 
     private void listEvents() {
