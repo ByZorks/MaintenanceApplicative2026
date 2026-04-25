@@ -58,12 +58,17 @@ public class CalendarManager {
 
     private boolean ajouterSiPossible(Event nouvelEvenement) {
         return events.stream().noneMatch(e -> conflit(e, nouvelEvenement))
-                && events.add(nouvelEvenement);
+                && ajouterToujours(nouvelEvenement); // Méthode juste pour enlever le warning
+    }
+
+    private boolean ajouterToujours(Event nouvelEvenement) {
+        events.add(nouvelEvenement);
+        return true;
     }
 
     public void afficherEvenements() {
         for (Event e : events) {
-            System.out.println(e.description());
+            System.out.println("[" + e.getId() + "] " + e.description());
         }
     }
 }

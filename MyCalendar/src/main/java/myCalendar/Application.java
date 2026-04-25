@@ -13,6 +13,8 @@ public class Application {
     private static final String MSG_CHOIX_INVALIDE = "Choix invalide";
     private static final String MSG_EVENEMENT_AJOUTE = "Événement ajouté.";
     private static final String MSG_CONFLIT_AJOUT = "Ajout refusé : conflit horaire avec un événement existant.";
+    private static final String MSG_EVENEMENT_SUPPRIME = "Événement supprimé.";
+    private static final String MSG_EVENEMENT_INTROUVABLE = "Aucun événement trouvé avec cet identifiant.";
     private static final String PROMPT_TITRE_EVENEMENT = "Titre de l'événement : ";
     private static final String PROMPT_DUREE_MINUTES = "Durée (en minutes) : ";
     private static final String PROMPT_ANNEE = "Année (AAAA) :";
@@ -89,7 +91,8 @@ public class Application {
                 3 - Ajouter une réunion
                 4 - Ajouter un évènement périodique
                 5 - Ajouter un déplacement
-                6 - Se déconnecter
+                6 - Supprimer un événement (EventId)
+                7 - Se déconnecter
                 """, auth.getCurrentUser());
         int choix = readInt("Votre choix :");
         switch (choix) {
@@ -98,8 +101,21 @@ public class Application {
             case 3 -> ajouterReunion();
             case 4 -> ajouterEventPeriodique();
             case 5 -> ajouterDeplacement();
-            case 6 -> disconnect();
+            case 6 -> supprimerEvenement();
+            case 7 -> disconnect();
             default -> System.err.println(MSG_CHOIX_INVALIDE);
+        }
+    }
+
+    private void supprimerEvenement() {
+        System.out.println("Événements disponibles :");
+        calendar.afficherEvenements();
+        EventId id = new EventId(readString("EventId à supprimer :"));
+        boolean supprime = calendar.supprimerEvenement(id);
+        if (supprime) {
+            System.out.println(MSG_EVENEMENT_SUPPRIME);
+        } else {
+            System.err.println(MSG_EVENEMENT_INTROUVABLE);
         }
     }
 
@@ -261,7 +277,7 @@ public class Application {
         } else {
             System.out.println("Événements trouvés : ");
             for (Event e : evenements) {
-                System.out.println("- " + e.description());
+                System.out.println("- [" + e.getId() + "] " + e.description());
             }
         }
     }
