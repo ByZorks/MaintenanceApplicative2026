@@ -1,5 +1,7 @@
 package myCalendar;
 
+import java.util.stream.Stream;
+
 public class Periodique extends Event {
 
     private final EventFrequency frequenceJours;
@@ -21,26 +23,16 @@ public class Periodique extends Event {
 
     @Override
     public boolean estDansPeriode(EventDateTime debut, EventDateTime fin) {
-        EventDateTime temp = dateDebut;
-        while (temp.isBefore(fin)) {
-            if (!temp.isBefore(debut))
-                return true;
-            temp = temp.plusDays(frequenceJours.valeur());
-        }
-        
-        return false;
+        int step = Math.max(1, frequenceJours.valeur());
+        return Stream.iterate(dateDebut, temp -> temp.isBefore(fin), temp -> temp.plusDays(step))
+                .anyMatch(temp -> !temp.isBefore(debut));
     }
 
     @Override
     public boolean chevauche(Event other) {
         EventDateTime otherFin = other.dateDebut.plusMinutes(other.dureeMinutes.valeur());
-        EventDateTime occurrence = dateDebut;
-        while (occurrence.isBefore(otherFin)) {
-            EventDateTime finOccurrence = occurrence.plusMinutes(dureeMinutes.valeur());
-            if (occurrence.isBefore(otherFin) && finOccurrence.isAfter(other.getDateDebut()))
-                return true;
-            occurrence = occurrence.plusDays(frequenceJours.valeur());
-        }
-        return false;
+        int step = Math.max(1, frequenceJours.valeur());
+        return Stream.iterate(dateDebut, occurrence -> occurrence.isBefore(otherFin), occurrence -> occurrence.plusDays(step))
+                .anyMatch(occurrence -> occurrence.plusMinutes(dureeMinutes.valeur()).isAfter(other.getDateDebut()));
     }
 }

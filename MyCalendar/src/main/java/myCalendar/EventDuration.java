@@ -1,8 +1,11 @@
 package myCalendar;
 
+import java.util.Optional;
+
 public record EventDuration(int valeur) {
     public EventDuration {
-        if (valeur <= 0)
-            throw new IllegalArgumentException("La durée doit être positive.");
+        Optional.of(valeur)
+                .filter(v -> v > 0)
+                .orElseThrow(() -> new IllegalArgumentException("La durée doit être positive."));
     }
 }

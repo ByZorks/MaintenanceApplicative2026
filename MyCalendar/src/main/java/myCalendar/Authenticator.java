@@ -16,23 +16,25 @@ public class Authenticator {
 
     public boolean createAccount(String name, String password) {
         EventOwner owner = new EventOwner(name);
-        if (accounts.containsKey(owner))
-            return false;
-
-        accounts.put(owner, password);
-        return true;
+        return Optional.of(owner)
+                .filter(o -> !accounts.containsKey(o))
+                .map(o -> {
+                    accounts.put(o, password);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public boolean login(String name, String password) {
         EventOwner owner = new EventOwner(name);
-        if (!accounts.containsKey(owner))
-            return false;
-
-        if (!accounts.get(owner).equals(password))
-            return false;
-
-        currentUser = Optional.of(owner);
-        return true;
+        return Optional.of(owner)
+                .filter(accounts::containsKey)
+                .filter(o -> accounts.get(o).equals(password))
+                .map(o -> {
+                    currentUser = Optional.of(o);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public void disconnect() {

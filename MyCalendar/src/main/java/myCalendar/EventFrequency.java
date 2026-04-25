@@ -1,9 +1,12 @@
 package myCalendar;
 
+import java.util.Optional;
+
 public record EventFrequency(int valeur) {
     public EventFrequency {
-        if (valeur < 0)
-            throw new IllegalArgumentException("La fréquence doit être positive.");
+        Optional.of(valeur)
+                .filter(v -> v >= 0)
+                .orElseThrow(() -> new IllegalArgumentException("La fréquence doit être positive."));
     }
 
     @Override

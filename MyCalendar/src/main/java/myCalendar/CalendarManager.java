@@ -57,11 +57,8 @@ public class CalendarManager {
     }
 
     private boolean ajouterSiPossible(Event nouvelEvenement) {
-        if (events.stream().anyMatch(e -> conflit(e, nouvelEvenement)))
-            return false;
-
-        events.add(nouvelEvenement);
-        return true;
+        return events.stream().noneMatch(e -> conflit(e, nouvelEvenement))
+                && events.add(nouvelEvenement);
     }
 
     public void afficherEvenements() {
