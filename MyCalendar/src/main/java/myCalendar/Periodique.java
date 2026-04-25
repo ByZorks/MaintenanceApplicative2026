@@ -28,11 +28,11 @@ public class Periodique extends Event {
 
     @Override
     public boolean chevauche(Event other) {
-        EventDateTime fin = dateDebut.plusMinutes(dureeMinutes.valeur());
+        EventDateTime otherFin = other.dateDebut.plusMinutes(other.dureeMinutes.valeur());
         EventDateTime occurrence = dateDebut;
-        while (occurrence.isBefore(fin)) {
+        while (occurrence.isBefore(otherFin)) {
             EventDateTime finOccurrence = occurrence.plusMinutes(dureeMinutes.valeur());
-            if (occurrence.isBefore(fin) && finOccurrence.isAfter(dateDebut))
+            if (occurrence.isBefore(otherFin) && finOccurrence.isAfter(other.getDateDebut()))
                 return true;
             occurrence = occurrence.plusDays(frequenceJours.valeur());
         }
